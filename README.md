@@ -1,6 +1,6 @@
 
 Note:
-Sorry to my english language mistakes, to correction/question/improvement and whatever you want feel free to contact me on gmail.com using name and surname .
+Sorry to my english mistakes, to correction/question/improvement and whatever you want feel free to contact me on gmail.com using name and surname .
 
 # Introduction
 
