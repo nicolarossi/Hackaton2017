@@ -245,7 +245,7 @@ For every cell we report avg &plusmn; sigma valuem and efficiency ( time with 1 
 ### on i5  XeonPhi
 
 |  Test | 1 thread | | 2 threads | | 4 threads |  |8 threads | |16 threads | |32 threads | |64 threads | |128 threads | |
-|-------|---|---|---|---|---|---|---|---|
+|-------|-------|-------|-------|-------|-------|-------|-------|-------|-------|-------|-------|-------|-------|-------|-------|-------|
 |  With INDIRECT_INDEX | 79.84 &plusmn; 2.29  |  n/a   | 42.12 &plusmn; 1.29  | 80%  | 23.58 &plusmn; 0.66  | 35%  | 14.17 &plusmn; 0.9  | 26% | 7.11 &plusmn; 1.09  | 26% | 26% | 3.19 &plusmn; 0.41 ** | 26% | 1.26 &plusmn; 0.81 **  | 26% |1.08 &plusmn; 0.63 ***  | 26% |
 |  with reduction clause | 80.3 &plusmn; 2.60  | 26% | 42.06 &plusmn; 0.70  | 26% | 23.13 &plusmn; 1.01  | 26% |14.14 &plusmn; 0.64  | 26% |7.1 &plusmn; 0.9  | 26% |3.019 &plusmn; 0.4 **  | 26% |1.044 &plusmn; 0.75 ** | 26% ** |1.016 &plusmn; 0.61 ** | 26% *** |
 
