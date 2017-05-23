@@ -61,7 +61,7 @@ force the compiler to create better code.
 
 ## REORDER_2
 
-Same idea of last step but observing that r, T are constant in our research.
+Same idea of last step but observing that S,K,r, T are constant in our research.
 
 
 
@@ -73,7 +73,7 @@ Same idea of last step but observing that r, T are constant in our research.
 
 ```
 
-and in the code we use 
+ the resulting code will be:
 
 ```
 
@@ -81,8 +81,9 @@ and in the code we use
 exp_rT=exp(r*T);
 c_pow=pow(T,0.5);
 
+for_each_row_in_input_file
 
-//--- inside the loop on stock rowse
+//--- ... inside the loop on stock row
 double v_pow=v*c_pow;
 
 log_S_K_p_RT=log(S/K)+r*T;
@@ -97,7 +98,7 @@ double _call_price(double S, double K, double r, double v, double T)
 ```
 
 # Exercise 2
-==================
+
 
 Explore the domain of volatility to find the value of "v" that generate a "call_price" .
 
@@ -110,12 +111,11 @@ In this version of the software we search volatility using a costant step loop t
 
 Using a $(sorry_i_have_forgotten_the_name)'s idea, we use a dynamic size of "dv"  but limited to the minimum value.
 
-The ratio v/dv is constant and this implies that to little value of v implies dv = 1e-4 ; bigger value of v implies dv_new = v*dv
+The ratio v/dv could be constant, this implies that little value of v  implies dv = 1e-4 ; bigger value of v implies dv_new = v*dv
 so the values of dv will be (by example)
 
 | Volatility | delta to search |
 |---|---|
-
 | 0 | 0.001 |
 | 0.001 | 0.001 |
 | 0.002 | 0.001 |
