@@ -212,7 +212,7 @@ The test result in this case are very surprising and unexpected.
 
 Due to the nature of the domain it would have been more efficient, easier but very less fun to parallelize the problem assigning every rows in the file to a different thread.
 
-To test myself I tried to parallelize every single stock and obviously are less efficient but more interesting.
+To personal challenge I tried to parallelize every single stock and obviously are less efficient, but more interesting.
 
 
 ## on i5 5500U 
