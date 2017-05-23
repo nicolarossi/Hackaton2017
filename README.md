@@ -170,9 +170,9 @@ is explored.
 For every thread the element in the rv vector of its ownership is adjacent to the rv element of
 the neighbor thread.
 
-rv[0] is the rv-element for the thread 1
-rv[1] is the rv-element for the thread 2
-rv[2] is the rv-element for the thread 3
+* rv[0] is the rv-element for the thread 1
+* rv[1] is the rv-element for the thread 2
+* rv[2] is the rv-element for the thread 3
 
 Due to the spacial locality, in the memory hierarchy system, more element of an array can be stored
 in the same row of cache.
