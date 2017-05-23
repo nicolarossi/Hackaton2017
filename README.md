@@ -181,7 +181,7 @@ This is an advantage in the reading stage but in the writing stage can become a 
 the necessity to synchronize the data between cache and memory propagating the write operation to
 the lower level of the hierarchy memory.
 
-So it will be more powerful to reduce the number of write in a vector shared between more threads,
+So it can be more powerful to reduce the number of writes in a vector shared between more threads,
 especially when the writing is made on the same cache block.
 
 To avoid this sharing we used the OpenMP reduction clause 
@@ -205,6 +205,8 @@ To avoid this sharing we used the OpenMP reduction clause
   
 ```
 
+The test result in this case are very surprising and unexpected.
+
 
 # Test result
 
@@ -215,7 +217,7 @@ To test myself I tried to parallelize every single stock and obviously are less 
 
 ## on i5 5500U 
 
-|Optimization   | avg (msec/stock) | sigma  | Note   |   |
+| Optimization   | avg (msec/stock) | sigma  | Note   |   |
 |---|---|---|---|---|
 |  dv Static  | 229.34  | 2.22  |   |   |
 |  dv Dynamic  | 7.67  | 0.77  |  INITIAL_DV=1e-4 |   |
@@ -231,17 +233,17 @@ To test myself I tried to parallelize every single stock and obviously are less 
 
 Using dv_dynamic + Reorder_2
 
-|  Test | 1 thread | 2 threads | 4 threads | 8 threads |
-|  Test | time | efficiency |time | efficiency |time | efficiency |time | efficiency |
-|---|---|---|---|---|---|---|---|---|
+For every cell we report avg &plusmn; sigma valuem and efficiency ( time with 1 threads / ( n * time_n threads) )
+
+|  Test | 1 thread | | 2 threads | | 4 threads |  |8 threads | |
+|---|
 |  With INDIRECT_INDEX | 3.29 &plusmn; 0.88  |  n/a   | 2.05 &plusmn; 0.21  | 80%  | 2.35 &plusmn; 1.00  | 35%  | 1.56 &plusmn; 0.84  | 26% |
 |  with reduction clause | 3.38 &plusmn; 0.86  | n/a  | 2.16 &plusmn; 0.65  | 78%  | 2.51 &plusmn; 1.19 |  33% |  1.54 &plusmn; 0.81 | 27%  |
 
 
-### on i5 5500U XeonPhi
+### on i5  XeonPhi
 
-|  Test | 1 thread | 2 threads | 4 threads | 8 threads |16 threads |32 threads |64 threads |128 threads |
-|  Test | time | efficiency |time | efficiency |time | efficiency |time | efficiency |time | efficiency |time | efficiency |time | efficiency |time | efficiency |
+|  Test | 1 thread | | 2 threads | | 4 threads |  |8 threads | |16 threads | |32 threads | |64 threads | |128 threads | |
 |---|---|---|---|---|---|---|---|---|
 |  With INDIRECT_INDEX | 79.84 &plusmn; 2.29  |  n/a   | 42.12 &plusmn; 1.29  | 80%  | 23.58 &plusmn; 0.66  | 35%  | 14.17 &plusmn; 0.9  | 26% | 7.11 &plusmn; 1.09  | 26% | 26% | 3.19 &plusmn; 0.41 ** | 26% | 1.26 &plusmn; 0.81 **  | 26% |1.08 &plusmn; 0.63 ***  | 26% |
 |  with reduction clause | 80.3 &plusmn; 2.60  | 26% | 42.06 &plusmn; 0.70  | 26% | 23.13 &plusmn; 1.01  | 26% |14.14 &plusmn; 0.64  | 26% |7.1 &plusmn; 0.9  | 26% |3.019 &plusmn; 0.4 **  | 26% |1.044 &plusmn; 0.75 ** | 26% ** |1.016 &plusmn; 0.61 ** | 26% *** |
