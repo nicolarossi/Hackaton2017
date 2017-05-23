@@ -247,7 +247,11 @@ For every cell we report avg &plusmn; sigma valuem and efficiency ( time with 1 
 |  Test | 1 thread | | 2 threads | | 4 threads |  |8 threads | |16 threads | |32 threads | |64 threads | |128 threads | |
 |-------|-------|-------|-------|-------|-------|-------|-------|-------|-------|-------|-------|-------|-------|-------|-------|-------|
 |  With INDIRECT_INDEX | 79.84 &plusmn; 2.29  |  n/a   | 42.12 &plusmn; 1.29  | 93%  | 23.58 &plusmn; 0.66  | 84%  | 14.17 &plusmn; 0.9  | 69% | 7.11 &plusmn; 1.09  | 69.44% | 3.19 &plusmn; 0.41 ** | 77% | 1.26 &plusmn; 0.81 **  | 97% |1.08 &plusmn; 0.63 ***  | 57% |
-|  with reduction clause | 80.3 &plusmn; 2.60  | n/a | 42.06 &plusmn; 0.70  | 95% | 23.13 &plusmn; 1.01  | 87% |14.14 &plusmn; 0.64  | 71% |7.1 &plusmn; 0.9  | 71% |3.019 &plusmn; 0.4 **  | 83% |1.26 &plusmn; 0.75 ** | 98% ** |1.016 &plusmn; 0.61 ** | 62% *** |
+|  with reduction clause | 80.3 &plusmn; 2.60  | n/a | 42.06 &plusmn; 0.70  | 95% | 23.13 &plusmn; 1.01  | 87% |14.14 &plusmn; 0.64  | 71% |7.1 &plusmn; 0.9  | 71% |3.019 &plusmn; 0.4 **  | 83% |1.26 &plusmn; 0.75 ** | 98%  |1.016 &plusmn; 0.61 ** | 62%  |
+
+
+** the measure is made with 1000 samples
+*** the measure is made with 10000 samples
 
 
 
