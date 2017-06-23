@@ -51,18 +51,19 @@ help the compiler to optimize that calculum
 
 ## USING_TEMPLATE
 
-Under a suggest of a friend I substitute the macro with "template inline" function
+Under a suggestion of a friend, I substituted the macro with "template inline" function like
 ```
 template<T>
-inline double ...
+inline double norm_cdf(...
 ```
+
 
 | Version | Size (Kb) | Time on single thread (msec) |
 |--------|--------|--------|
 | USING_MACRO | 26 |  27.707 | 
 | USING_TEMPLATE | 26 | 26.493 |
 
-so to find a performance improvement is needly a good idea, read the next paragraphs.
+there is  a little performance improvement, but is needly a better idea, read the next paragraphs.
 
 ## REORDER_1
 
