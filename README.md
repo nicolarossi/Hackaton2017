@@ -1,6 +1,6 @@
 
 Note:
-Sorry to my english mistakes, to correction/question/improvement and whatever you want feel free to contact me on gmail.com using name and surname  or on the #meetingcpp IRC channel.
+To correction/question/improvement and whatever you want feel free to contact me on gmail.com using name and surname  or on the #meetingcpp IRC channel.
 
 # Introduction
 
@@ -19,6 +19,7 @@ To test  different version of the code, you can play to define in the source cod
 *  USING_MACRO
 *  REORDER_1
 *  REORDER_2
+*  USING_TEMPLATE
 *  INDIRECT_INDEX
 *  USING_REDUCTION
 
@@ -47,6 +48,21 @@ help the compiler to optimize that calculum
 #define d2( S,  K,  r,  v, T)  ( d1(S, K, r, v, T) - v*(pow(T, 0.5)))
 
 ```
+
+## USING_TEMPLATE
+
+Under a suggest of a friend I substitute the macro with "template inline" function
+```
+template<T>
+inline double ...
+```
+
+| Version | Size (Kb) | Time on single thread (msec) |
+|--------|--------|--------|
+| USING_MACRO | 26 |  27.707 | 
+| USING_TEMPLATE | 26 | 26.493 |
+
+so to find a performance improvement is needly a good idea, read the next paragraphs.
 
 ## REORDER_1
 
@@ -254,6 +270,8 @@ For every cell we report avg &plusmn; sigma valuem and efficiency ( time with 1 
 *** the measure is made with 10000 samples
 
 
+# Future works
 
+Implement the search using SSE instruction set.
 
 

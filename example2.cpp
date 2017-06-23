@@ -20,6 +20,7 @@
 //#define USING_MACRO
 //#define REORDER_1
 #define REORDER_2
+//#define USING_TEMPLATE
 
 /* A strategy to parallelize and speedup the single stock loop in a simple way define or not to enable/disable it. 
   disabling this and enabling DYNAMIC_DV you test loop also with a dv dynamic (disabling both test with dv static
@@ -35,7 +36,7 @@
 
 /* DON'T TOUCH UNDER THIS ROW */
 
-#ifdef FUNCTION
+#if defined FUNCTION
 double norm_cdf(double value) {
   return 0.5 * erfc(-value * M_SQRT1_2);
 }
@@ -49,27 +50,33 @@ double d2(double S, double K, double r, double v, double T)
 {
   return d1(S, K, r, v, T) - v*(pow(T, 0.5));
 }
-#else
-#ifdef REORDER_1
-#define norm_cdf( value) ( 0.5 * erfc(-value * M_SQRT1_2))
-#define d1( S,  K,  r,  v,  T,v_pow) (( (log(S / K) + r*T) / (v_pow)) + 0.5*v_pow )
-#define d2( S,  K,  r,  v, T,v_pow)  (( (log(S / K) + r*T) / (v_pow)) - 0.5*v_pow )
-#else
-#ifdef REORDER_2
-#define norm_cdf( value) ( 0.5 * erfc(-value * M_SQRT1_2))
+#elif defined  REORDER_1
+ #define norm_cdf( value) ( 0.5 * erfc(-value * M_SQRT1_2))
+ #define d1( S,  K,  r,  v,  T,v_pow) (( (log(S / K) + r*T) / (v_pow)) + 0.5*v_pow )
+ #define d2( S,  K,  r,  v, T,v_pow)  (( (log(S / K) + r*T) / (v_pow)) - 0.5*v_pow )
+#elif defined REORDER_2
+ #define norm_cdf( value) ( 0.5 * erfc(-value * M_SQRT1_2))
+ #define d1( S,  K,  r,  v,  T,v_pow,log_S_K_p_rT) (( (log_S_K_p_rT) / (v_pow)) + 0.5*v_pow )
+ #define d2( S,  K,  r,  v, T,v_pow,log_S_K_p_rT)  (( (log_S_K_p_rT) / (v_pow)) - 0.5*v_pow )
+#elif defined USING_MACRO
+  #define norm_cdf( value) ( 0.5 * erfc(-value * M_SQRT1_2))
+  #define d1( S,  K,  r,  v,  T) ( (log(S / K) + r*T) / (v*(pow(T, 0.5))) + 0.5*v*(pow(T, 0.5)))
+  #define d2( S,  K,  r,  v, T)  ( d1(S, K, r, v, T) - v*(pow(T, 0.5)))
+#elif defined USING_TEMPLATE
+template<typename T>
+inline T norm_cdf( T value) {
+  return ( 0.5 * erfc(-value * M_SQRT1_2));
+}
 
-#define d1( S,  K,  r,  v,  T,v_pow,log_S_K_p_rT) (( (log_S_K_p_rT) / (v_pow)) + 0.5*v_pow )
-#define d2( S,  K,  r,  v, T,v_pow,log_S_K_p_rT)  (( (log_S_K_p_rT) / (v_pow)) - 0.5*v_pow )
+template<typename T>
+inline T d1( T S,  T K,  T r,  T v,  T t) {
+  return ( (log(S / K) + r*t) / (v*(pow(t, 0.5))) + 0.5*v*(pow(t, 0.5)));
+}
 
-#else 
-#ifdef USING_MACRO
-#define norm_cdf( value) ( 0.5 * erfc(-value * M_SQRT1_2))
-#define d1( S,  K,  r,  v,  T) ( (log(S / K) + r*T) / (v*(pow(T, 0.5))) + 0.5*v*(pow(T, 0.5)))
-#define d2( S,  K,  r,  v, T)  ( d1(S, K, r, v, T) - v*(pow(T, 0.5)))
-#endif
-#endif
-#endif
-
+template<typename T>
+inline T d2( T S, T  K, T r,  T v, T t)  {
+  return ( d1(S, K, r, v, t) - v*(pow(t, 0.5)));
+}
 #endif
 
 int n_max;
@@ -81,11 +88,10 @@ double exp_rT, v_pow, log_S_K_p_RT,c_pow;
 // underlying sigma and time to maturity T
 double _call_price(double S, double K, double r, double v, double T) 
 {
-#ifdef REORDER_1
+#if defined REORDER_1
   double v_pow=v*(pow(T, 0.5));
   return S * norm_cdf(d1(S, K, r, v, T,v_pow)) - K*exp(-r*T) * norm_cdf(d2(S, K, r, v, T,v_pow));
-#else
-#if defined(REORDER_2)
+#elif defined REORDER_2
   extern double c_pow,log_S_K_p_RT,exp_rT;
   double v_pow=v*c_pow;
   //.....
@@ -98,7 +104,6 @@ double _call_price(double S, double K, double r, double v, double T)
 #else
   return S * norm_cdf(d1(S, K, r, v, T)) - K*exp(-r*T) * norm_cdf(d2(S, K, r, v, T));
 #endif
-#endif
 }
 
 // vanilla european put price based on
@@ -109,16 +114,13 @@ double put_price(double S, double K, double r, double v, double T)
 #ifdef REORDER_1
   double v_pow=v*(pow(T, 0.5));
   return -S * norm_cdf(-d1(S, K, r, v, T,v_pow)) + K*exp(-r*T) * norm_cdf(-d2(S, K, r, v, T,v_pow));
-#else
-#ifdef REORDER_2
+#elif defined REORDER_2
   std::cerr<< "NOT YET IMPLEMENTED at line "<<__LINE__<<"\n";
   exit(-1);
 #else
   return -S * norm_cdf(-d1(S, K, r, v, T)) + K*exp(-r*T) * norm_cdf(-d2(S, K, r, v, T));
 #endif
-#endif
 }
-
 
 //---- We look for call_to_find from a,b with step dv
 
@@ -328,13 +330,6 @@ int main(int argc, char **argv)
 
 #ifdef INDIRECT_INDEX
   __create_partitioned_loop(a,b,dv);
-  /*  int i=0;
-  for (auto it=step.begin();it!=step.end();++it) {
-    std::cerr<<" "<<i++<<" "<<it->v<<"\n";
-    if (it->v >0.201) {
-      exit(-1);
-    }
-  }*/
 #endif
 
   double r = 0.02; // risk-free interest rate (2%)
@@ -398,9 +393,9 @@ int main(int argc, char **argv)
     //  values for volatility) until you find a return value that matches the
     //  call value.
 
-    auto endTime = std::chrono::high_resolution_clock::now();
-   std::cerr << " Readed "<< readed << " processed "<< processed<<"\n";
-   auto diff = std::chrono::duration_cast<std::chrono::milliseconds>(endTime-startTime).count();
+  auto endTime = std::chrono::high_resolution_clock::now();
+  std::cerr << " Readed "<< readed << " processed "<< processed<<"\n";
+  auto diff = std::chrono::duration_cast<std::chrono::milliseconds>(endTime-startTime).count();
  
    std::cerr << " Time :"<<diff<<"\n";
    std::cerr << " Horse Power :"<<((double)processed/(double)diff)<<"\n";
